@@ -11,8 +11,18 @@ permissions:
   id-token: write
 
 jobs:
-  release:
-    runs-on: macos-latest
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            suffix: aarch64
+          - os: macos-13
+            target: x86_64-apple-darwin
+            suffix: x64
+
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v4
@@ -26,31 +36,28 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: aarch64-apple-darwin,x86_64-apple-darwin
+          targets: ${{ matrix.target }}
 
       - name: Install frontend deps
         run: npm ci
 
-      - name: Build Tauri App (Universal)
+      - name: Build Tauri App
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ""
-        run: npm run tauri build -- --target universal-apple-darwin
-
-      - name: Get version
-        id: version
-        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+        run: npm run tauri build -- --target ${{ matrix.target }}
 
       - name: Collect artifact paths
         id: artifacts
         run: |
-          DMG=$(ls src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg | head -1)
-          UPDATER_GZ=$(ls src-tauri/target/universal-apple-darwin/release/bundle/macos/*.tar.gz | head -1)
+          DMG=$(ls src-tauri/target/${{ matrix.target }}/release/bundle/dmg/*.dmg | head -1)
+          UPDATER_GZ=$(ls src-tauri/target/${{ matrix.target }}/release/bundle/macos/*.tar.gz | head -1)
           UPDATER_SIG="${UPDATER_GZ}.sig"
           echo "DMG=$DMG" >> $GITHUB_OUTPUT
           echo "UPDATER_GZ=$UPDATER_GZ" >> $GITHUB_OUTPUT
           echo "UPDATER_SIG=$UPDATER_SIG" >> $GITHUB_OUTPUT
           echo "UPDATER_FILENAME=$(basename $UPDATER_GZ)" >> $GITHUB_OUTPUT
+          echo "SIG=$(cat $UPDATER_SIG)" >> $GITHUB_OUTPUT
 
       - name: Upload GitHub Release
         uses: softprops/action-gh-release@v2
@@ -60,11 +67,44 @@ jobs:
             ${{ steps.artifacts.outputs.UPDATER_GZ }}
             ${{ steps.artifacts.outputs.UPDATER_SIG }}
 
+      - name: Upload updater info
+        uses: actions/upload-artifact@v4
+        with:
+          name: updater-${{ matrix.suffix }}
+          path: |
+            ${{ steps.artifacts.outputs.UPDATER_GZ }}
+            ${{ steps.artifacts.outputs.UPDATER_SIG }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get version
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+
+      - name: Download aarch64 updater info
+        uses: actions/download-artifact@v4
+        with:
+          name: updater-aarch64
+          path: updater-aarch64
+
+      - name: Download x64 updater info
+        uses: actions/download-artifact@v4
+        with:
+          name: updater-x64
+          path: updater-x64
+
       - name: Generate latest.json
         run: |
           VERSION="${{ steps.version.outputs.VERSION }}"
-          FILENAME="${{ steps.artifacts.outputs.UPDATER_FILENAME }}"
-          SIG=$(cat "${{ steps.artifacts.outputs.UPDATER_SIG }}")
+          AARCH64_GZ=$(ls updater-aarch64/*.tar.gz | head -1)
+          X64_GZ=$(ls updater-x64/*.tar.gz | head -1)
+          AARCH64_SIG=$(cat ${AARCH64_GZ}.sig)
+          X64_SIG=$(cat ${X64_GZ}.sig)
+          AARCH64_FILENAME=$(basename $AARCH64_GZ)
+          X64_FILENAME=$(basename $X64_GZ)
           cat > latest.json << EOF
           {
             "version": "$VERSION",
@@ -72,12 +112,12 @@ jobs:
             "pub_date": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
             "platforms": {
               "darwin-aarch64": {
-                "url": "https://github.com/${{ github.repository }}/releases/download/v$VERSION/$FILENAME",
-                "signature": "$SIG"
+                "url": "https://github.com/${{ github.repository }}/releases/download/v$VERSION/$AARCH64_FILENAME",
+                "signature": "$AARCH64_SIG"
               },
               "darwin-x86_64": {
-                "url": "https://github.com/${{ github.repository }}/releases/download/v$VERSION/$FILENAME",
-                "signature": "$SIG"
+                "url": "https://github.com/${{ github.repository }}/releases/download/v$VERSION/$X64_FILENAME",
+                "signature": "$X64_SIG"
               }
             }
           }
