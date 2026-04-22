@@ -40,7 +40,7 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IENBNUFEMzM0OERDRUVBRUYKUldUdjZzNk5OTk5heWxROU5FM3Z6ZWNiYVl0eXhoQ0NwVk5WSlNCLzRHeUdGTzdzN0lGd2Z3SHoK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEU1RjQ2MUU2RkFEMTY0NkQKUldSdFpOSDY1bUgwNWNvVnlwYnlPSWdUYVUrNUJWVFZ5K3pDK2dLNnpFS0owcHRjZjBRc3BvaFIK",
       "endpoints": [
         "https://jakechang.github.io/Kujira/latest.json"
       ],
