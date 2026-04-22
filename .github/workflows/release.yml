@@ -41,15 +41,14 @@ jobs:
       - name: Install frontend deps
         run: npm ci
 
-      - name: Set up signing key
-        run: |
-          FULL_KEY=$(printf 'untrusted comment: rsign encrypted secret key\n%s\n' "$KEY_LINE")
-          echo "TAURI_SIGNING_PRIVATE_KEY=$(printf '%s' "$FULL_KEY" | base64 | tr -d '\n')" >> $GITHUB_ENV
+      - name: Write signing key
+        run: printf '%s' "$KEY_B64" | base64 -d > /tmp/kujira.key
         env:
-          KEY_LINE: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          KEY_B64: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
 
       - name: Build Tauri App
         env:
+          TAURI_SIGNING_PRIVATE_KEY_PATH: /tmp/kujira.key
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ""
         run: npm run tauri build -- --target ${{ matrix.target }}
 
