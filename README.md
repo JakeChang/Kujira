@@ -36,28 +36,6 @@ npm run tauri build # 建置 .app
 
 **需求：** Node.js ≥ 18、Rust stable、macOS 15.0+
 
-## 技術架構
-
-```
-src/                        # 前端 (React + TypeScript + Tailwind CSS 4)
-├── components/
-│   ├── claude/             # Claude 用量監控面板
-│   ├── layout/             # FavoriteBar, SettingsPanel, RightPanel
-│   ├── servers/            # ServerPanel, LogPane
-│   └── terminal/           # TerminalPane (xterm.js)
-├── hooks/
-└── store/                  # Zustand 全域狀態
-
-src-tauri/src/              # 後端 (Rust)
-├── commands/
-│   ├── claude.rs           # Claude usage / quota / session
-│   ├── pty.rs              # PTY 生成與串流
-│   ├── server.rs           # 伺服器行程管理
-│   ├── git.rs              # Git 操作
-│   └── hooks.rs            # Claude Code hooks 狀態輪詢
-└── lib.rs
-```
-
 ## License
 
 MIT
