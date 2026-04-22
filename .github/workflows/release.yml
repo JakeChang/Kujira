@@ -41,14 +41,9 @@ jobs:
       - name: Install frontend deps
         run: npm ci
 
-      - name: Write signing key
-        run: printf '%s' "$KEY_B64" | base64 -d > /tmp/kujira.key
-        env:
-          KEY_B64: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-
       - name: Build Tauri App
         env:
-          TAURI_SIGNING_PRIVATE_KEY_PATH: /tmp/kujira.key
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ""
         run: npm run tauri build -- --target ${{ matrix.target }}
 
