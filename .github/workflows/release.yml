@@ -25,15 +25,17 @@ jobs:
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
 
       - name: Install frontend deps
         run: npm ci
 
-      - name: Build Tauri App
+      - name: Build Tauri App (Universal)
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ""
-        run: npm run tauri build
+        run: npm run tauri build -- --target universal-apple-darwin
 
       - name: Get version
         id: version
@@ -42,8 +44,8 @@ jobs:
       - name: Collect artifact paths
         id: artifacts
         run: |
-          DMG=$(ls src-tauri/target/release/bundle/dmg/*.dmg | head -1)
-          UPDATER_GZ=$(ls src-tauri/target/release/bundle/macos/*.tar.gz | head -1)
+          DMG=$(ls src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg | head -1)
+          UPDATER_GZ=$(ls src-tauri/target/universal-apple-darwin/release/bundle/macos/*.tar.gz | head -1)
           UPDATER_SIG="${UPDATER_GZ}.sig"
           echo "DMG=$DMG" >> $GITHUB_OUTPUT
           echo "UPDATER_GZ=$UPDATER_GZ" >> $GITHUB_OUTPUT
@@ -70,6 +72,10 @@ jobs:
             "pub_date": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
             "platforms": {
               "darwin-aarch64": {
+                "url": "https://github.com/${{ github.repository }}/releases/download/v$VERSION/$FILENAME",
+                "signature": "$SIG"
+              },
+              "darwin-x86_64": {
                 "url": "https://github.com/${{ github.repository }}/releases/download/v$VERSION/$FILENAME",
                 "signature": "$SIG"
               }
