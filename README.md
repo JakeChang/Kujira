@@ -1,65 +1,63 @@
-# dev-terminal
+# Kujira（鯨）
 
-macOS 原生開發終端機，整合終端模擬器、開發伺服器管理與 Claude API 用量監控。
+> macOS 原生開發終端機，整合多分頁終端、Claude AI 用量監控、Gemini 指令建議與 Git 操作
 
-基於 Tauri 2 + React + xterm.js 打造，專為日常開發工作流設計。
+![cover](cover.png)
+
+基於 **Tauri 2 + React 18 + xterm.js** 打造，專為日常開發工作流設計。
 
 ## 功能
 
-- **終端模擬器** — 多分頁 shell，支援拖放檔案路徑、字體大小調整、全域快捷鍵（`⌘T` 新分頁、`⌘W` 關閉、`⌘[`/`⌘]` 切換）
-- **開發伺服器管理** — 啟動 / 停止 / 重啟伺服器，即時 log 輸出，行程樹清理（app 崩潰重啟後也能正確回收）
-- **Claude API 監控** — 即時 quota 用量（5 小時 / 7 天 / Sonnet 額度）、每日 / 每月花費追蹤（讀取 Claude Code 本地 JSONL log）
-- **我的最愛** — 快速存取專案目錄與伺服器捷徑，支援分組、拖曳排序、摺疊
-- **可調面板** — 左側我的最愛列（`⌘B`）、右側伺服器 + 用量面板（`⌘P`），寬度可拖曳調整
+- **多分頁終端** — xterm.js + PTY，支援 shell、server log、Claude 監控三種分頁類型，中文 IME 最佳化
+- **Claude AI 用量監控** — 即時讀取 JSONL 記錄，顯示每日 token 消耗、費用與 quota 狀態
+- **Gemini AI 指令建議** — 輸入 `? 問題` 即可獲得 shell 指令建議
+- **Git 操作面板** — status、commit、branch、push/pull，不離開視窗完成所有 Git 操作
+- **開發伺服器管理** — 啟停伺服器，PID 持久化，App 崩潰重啟後能正確回收殘留行程
+- **Claude Code Hooks 整合** — 即時追蹤 Claude agent 狀態（working / idle / pending）
+- **自動更新** — 內建更新檢查，設定頁面一鍵安裝最新版本
+
+## 下載
+
+前往 [Releases](https://github.com/JakeChang/Kujira/releases/latest) 下載最新版 DMG。
+
+首次安裝需執行：
+
+```bash
+xattr -cr /Applications/Kujira.app
+```
+
+## 開發
+
+```bash
+npm install
+npm run tauri dev   # 開發模式（Rust + React 同時啟動）
+npm run tauri build # 建置 .app
+```
+
+**需求：** Node.js ≥ 18、Rust stable、macOS 15.0+
 
 ## 技術架構
 
 ```
 src/                        # 前端 (React + TypeScript + Tailwind CSS 4)
 ├── components/
-│   ├── claude/             # Claude 用量面板、登入流程
-│   ├── layout/             # FavoriteBar, RightPanel, TabBar
+│   ├── claude/             # Claude 用量監控面板
+│   ├── layout/             # FavoriteBar, SettingsPanel, RightPanel
 │   ├── servers/            # ServerPanel, LogPane
 │   └── terminal/           # TerminalPane (xterm.js)
-├── hooks/                  # useClaudeUsage, useFavorites, useServers, useTabs, useTerminal
-├── store/                  # Zustand 全域狀態
-└── types/
+├── hooks/
+└── store/                  # Zustand 全域狀態
 
 src-tauri/src/              # 後端 (Rust)
 ├── commands/
-│   ├── claude.rs           # Claude API session / quota / 本地花費
-│   ├── config.rs           # 讀寫 ~/.dev-terminal/config.json
-│   ├── pty.rs              # PTY 生成、輸入輸出串流
-│   └── server.rs           # 伺服器行程管理、log 串流
-├── lib.rs
-└── main.rs
+│   ├── claude.rs           # Claude usage / quota / session
+│   ├── pty.rs              # PTY 生成與串流
+│   ├── server.rs           # 伺服器行程管理
+│   ├── git.rs              # Git 操作
+│   └── hooks.rs            # Claude Code hooks 狀態輪詢
+└── lib.rs
 ```
 
-## 開發
+## License
 
-```bash
-# 安裝前端依賴
-npm install
-
-# 啟動開發模式（前端 + Tauri 同時啟動）
-npm run tauri dev
-
-# 建置 .app
-npm run tauri build
-```
-
-### 需求
-
-- Node.js ≥ 18
-- Rust (stable)
-- Tauri CLI 2（`npm run tauri` 會使用 devDependencies 中的 `@tauri-apps/cli`）
-
-## 設定
-
-應用程式設定檔位於 `~/.dev-terminal/config.json`，包含：
-
-- 終端偏好（字體大小、shell 路徑）
-- 面板佈局（寬度、可見性）
-- 我的最愛（目錄捷徑、分組）
-- 伺服器清單（名稱、指令、工作目錄）
-- Claude 預算上限與 usage log 路徑
+MIT
