@@ -41,13 +41,12 @@ jobs:
       - name: Install frontend deps
         run: npm ci
 
-      - name: Decode signing key
+      - name: Set up signing key
         run: |
-          echo 'TAURI_SIGNING_PRIVATE_KEY<<EOF' >> $GITHUB_ENV
-          echo "$KEY_B64" | base64 -d >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+          FULL_KEY=$(printf 'untrusted comment: rsign encrypted secret key\n%s\n' "$KEY_LINE")
+          echo "TAURI_SIGNING_PRIVATE_KEY=$(printf '%s' "$FULL_KEY" | base64 | tr -d '\n')" >> $GITHUB_ENV
         env:
-          KEY_B64: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          KEY_LINE: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
 
       - name: Build Tauri App
         env:
