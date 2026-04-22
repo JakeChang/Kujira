@@ -1,0 +1,32 @@
+# 依賴套件
+node_modules/
+
+# 建置產出
+dist/
+src-tauri/target/
+src-tauri/gen/
+
+# 環境設定
+.env
+.env.local
+.env.*.local
+
+# Claude Code
+.claude/settings.local.json
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# 編輯器
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 日誌
+*.log
+npm-debug.log*
+
+# Tauri
+src-tauri/WixTools/

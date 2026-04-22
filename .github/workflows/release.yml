@@ -1,0 +1,86 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  release:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install frontend deps
+        run: npm ci
+
+      - name: Build Tauri App
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ""
+        run: npm run tauri build
+
+      - name: Get version
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+
+      - name: Collect artifact paths
+        id: artifacts
+        run: |
+          DMG=$(ls src-tauri/target/release/bundle/dmg/*.dmg | head -1)
+          UPDATER_GZ=$(ls src-tauri/target/release/bundle/macos/*.tar.gz | head -1)
+          UPDATER_SIG="${UPDATER_GZ}.sig"
+          echo "DMG=$DMG" >> $GITHUB_OUTPUT
+          echo "UPDATER_GZ=$UPDATER_GZ" >> $GITHUB_OUTPUT
+          echo "UPDATER_SIG=$UPDATER_SIG" >> $GITHUB_OUTPUT
+          echo "UPDATER_FILENAME=$(basename $UPDATER_GZ)" >> $GITHUB_OUTPUT
+
+      - name: Upload GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ${{ steps.artifacts.outputs.DMG }}
+            ${{ steps.artifacts.outputs.UPDATER_GZ }}
+            ${{ steps.artifacts.outputs.UPDATER_SIG }}
+
+      - name: Generate latest.json
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          FILENAME="${{ steps.artifacts.outputs.UPDATER_FILENAME }}"
+          SIG=$(cat "${{ steps.artifacts.outputs.UPDATER_SIG }}")
+          cat > latest.json << EOF
+          {
+            "version": "$VERSION",
+            "notes": "版本 $VERSION",
+            "pub_date": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "platforms": {
+              "darwin-aarch64": {
+                "url": "https://github.com/${{ github.repository }}/releases/download/v$VERSION/$FILENAME",
+                "signature": "$SIG"
+              }
+            }
+          }
+          EOF
+
+      - name: Deploy latest.json to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          include_files: latest.json
+          keep_files: true

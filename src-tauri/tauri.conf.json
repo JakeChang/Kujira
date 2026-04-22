@@ -1,0 +1,50 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nicegui/nicegui/main/tauri/tauri.conf.json",
+  "productName": "Kujira",
+  "version": "0.1.0",
+  "identifier": "dev.jkone.kujira",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Kujira",
+        "width": 1200,
+        "height": 750,
+        "minWidth": 800,
+        "minHeight": 500,
+        "decorations": true,
+        "transparent": false,
+        "visible": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "createUpdaterArtifacts": "v1Compatible",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IENBNUFEMzM0OERDRUVBRUYKUldUdjZzNk5OTk5heWxROU5FM3Z6ZWNiYVl0eXhoQ0NwVk5WSlNCLzRHeUdGTzdzN0lGd2Z3SHoK",
+      "endpoints": [
+        "https://jakechang.github.io/Kujira/latest.json"
+      ],
+      "dialog": false
+    }
+  }
+}

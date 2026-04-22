@@ -1,0 +1,41 @@
+[package]
+name = "kujira"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "kujira_lib"
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[[bin]]
+name = "kujira"
+path = "src/main.rs"
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-shell = "2"
+tauri-plugin-fs = "2"
+tauri-plugin-notification = "2"
+tauri-plugin-opener = "2"
+tauri-plugin-updater = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+portable-pty = "0.8"
+uuid = { version = "1", features = ["v4"] }
+dirs = "5"
+chrono = "0.4"
+reqwest = { version = "0.12", features = ["cookies", "json"] }
+tokio = { version = "1", features = ["time"] }
+objc2 = "0.6"
+objc2-foundation = { version = "0.3", features = ["NSHTTPCookieStorage", "NSHTTPCookie", "NSURL", "NSString", "NSArray", "NSDictionary"] }
+libc = "0.2"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true

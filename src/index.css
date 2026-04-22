@@ -1,0 +1,81 @@
+@import "tailwindcss";
+@import "@xterm/xterm/css/xterm.css";
+
+:root {
+  --bg-primary: #282c34;
+  --bg-secondary: #2e323c;
+  --bg-tertiary: #23272e;
+  --bg-elevated: #353b45;
+  --text-primary: #dcdfe4;
+  --text-secondary: #9da5b4;
+  --text-muted: #5c6370;
+  --accent-blue: #61afef;
+  --accent-green: #98c379;
+  --accent-yellow: #e5c07b;
+  --accent-red: #e06c75;
+  --accent-purple: #c678dd;
+  --border-color: #3e4452;
+  --border-subtle: #343a46;
+  --tab-active: #282c34;
+  --tab-inactive: #23272e;
+  --hover-bg: rgba(255, 255, 255, 0.06);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* xterm.js — padding must be on the container, NOT on .xterm,
+   because FitAddon measures parentElement width and subtracts .xterm padding,
+   which can conflict with box-sizing: border-box from Tailwind */
+.xterm {
+  padding: 0;
+  background: var(--bg-primary) !important;
+}
+.xterm-viewport {
+  background-color: var(--bg-primary) !important;
+}
+.xterm-viewport::-webkit-scrollbar {
+  width: 5px;
+}
+.xterm-viewport::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 4px;
+}
+
+/* Smooth transitions */
+.panel-transition {
+  transition: width 0.2s ease, min-width 0.2s ease, opacity 0.2s ease;
+}

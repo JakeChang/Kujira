@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kujira</title>
+    <style>
+      html, body, #root { margin: 0; padding: 0; background: #282c34; height: 100%; width: 100%; overflow: hidden; }
+      #splash {
+        position: fixed; inset: 0; z-index: 9999;
+        display: flex; align-items: center; justify-content: center;
+        background: #282c34;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+        color: #5c6370;
+        font-size: 13px;
+        letter-spacing: 0.05em;
+        transition: opacity 0.3s ease;
+      }
+      #splash.hide { opacity: 0; pointer-events: none; }
+      @keyframes pulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+      #splash span { animation: pulse 1.5s ease-in-out infinite; }
+    </style>
+  </head>
+  <body oncontextmenu="event.preventDefault()">
+    <div id="splash"><span>Kujira</span></div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
