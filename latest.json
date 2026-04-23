@@ -1,15 +1,15 @@
 {
-  "version": "0.1.0",
-  "notes": "版本 0.1.0",
-  "pub_date": "2026-04-23T00:05:12Z",
+  "version": "0.1.1",
+  "notes": "版本 0.1.1",
+  "pub_date": "2026-04-23T12:40:34Z",
   "platforms": {
     "darwin-aarch64": {
-      "url": "https://github.com/JakeChang/Kujira/releases/download/v0.1.0/Kujira.app.tar.gz",
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSdFpOSDY1bUgwNVJDQW1NRWVwVm9aU2NvYjROakhqYXZQczhOUU5oVGFXdERYUFY5WFZsY3RUQXpKbC9DYUxlUEFjV3BHRDJyOFZ4VUJtTmdxSzRjbGV2bWhDenB4Z1FVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc2OTAyNjcxCWZpbGU6S3VqaXJhLmFwcC50YXIuZ3oKWGZxZWQvVlNaVVJ6elI0VkZaWmtrS3hhUzNhM2NtdHdRZ2Y2c2ZqaUZVY2RGdzhqcDlDZWF0OG90VjgxT3pKRStRQjhSc1d0RStWRnJwWkIzUEYzRFE9PQo="
+      "url": "https://github.com/JakeChang/Kujira/releases/download/v0.1.1/Kujira.app.tar.gz",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSdFpOSDY1bUgwNVUxVEJFUjVsWkVyU2h1d3JIeXJLYmZ6Tjd5NktYWmgvUkRBb2Uvc2dWV3hpTHZndi9DTzNpd0JqN0s4bSsySDB1eW1Fa0d1cDZNVG1iWFZzYlNLWFFVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc2OTQ4MDE3CWZpbGU6S3VqaXJhLmFwcC50YXIuZ3oKS09uY2F1d05oQkVIRm5nVytKOFJpYi8wRC9Ua3NMVXBKUXFtZUhwUnpBbWxEZml4V0RxZ0FpTW50MFJ5SHhodldlUmNVYkFoaHJXR3dmSmNIeXNiQ3c9PQo="
     },
     "darwin-x86_64": {
-      "url": "https://github.com/JakeChang/Kujira/releases/download/v0.1.0/Kujira.app.tar.gz",
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSdFpOSDY1bUgwNVFha1NBTkg0cSsxR3E0MmdZNmI3MmNYNGczNFp5a0dCczNQSEdVVkIwTHZNZzRFaGNSL0lLbU50NzhHcTdGbFNCM2FpTmdNZXdhclk4VWZUblpjSHdnPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc2OTAyNjk2CWZpbGU6S3VqaXJhLmFwcC50YXIuZ3oKcHlvWGduMUxNcmY4cHFjUG9SK3dCMzljM0ZKRmwrVDlPRzQrZ0t6ampDMkhGRm1uZ0d6SEtLT1ZrNFUrUy9TcTM3NUxBUUNyWUlhdDZlSVNYN3ZBRFE9PQo="
+      "url": "https://github.com/JakeChang/Kujira/releases/download/v0.1.1/Kujira.app.tar.gz",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSdFpOSDY1bUgwNVRBTHJGbUhGK245OUQ0TXNYZGVVU1Nra3NBbGtta2JuTDRrTTBaWVlqdUJCVjFoOTBpZjRaM0tnNE5xb2tlc1Q2Slh4RTNsKzBLejlOaWN6bW5LSFFrPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc2OTQ3OTUzCWZpbGU6S3VqaXJhLmFwcC50YXIuZ3oKWDhpZUN4azhSOWR1dHRkR3VPdlg4MHBiU2ZsemRyMUJpREhTSVFPUENOc3RMLzM0dlNKdWR2eWhrVHRaNkJxTExlWCtiQmRoT2ZkcnVNZHorcWg3QWc9PQo="
     }
   }
 }
