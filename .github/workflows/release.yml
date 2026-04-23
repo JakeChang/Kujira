@@ -53,11 +53,15 @@ jobs:
           DMG=$(ls src-tauri/target/${{ matrix.target }}/release/bundle/dmg/*.dmg | head -1)
           UPDATER_GZ=$(ls src-tauri/target/${{ matrix.target }}/release/bundle/macos/*.tar.gz | head -1)
           UPDATER_SIG="${UPDATER_GZ}.sig"
+          VERSION="${GITHUB_REF_NAME#v}"
+          RENAMED_GZ="Kujira_${VERSION}_${{ matrix.suffix }}.app.tar.gz"
+          RENAMED_SIG="${RENAMED_GZ}.sig"
+          cp "$UPDATER_GZ" "$RENAMED_GZ"
+          cp "$UPDATER_SIG" "$RENAMED_SIG"
           echo "DMG=$DMG" >> $GITHUB_OUTPUT
-          echo "UPDATER_GZ=$UPDATER_GZ" >> $GITHUB_OUTPUT
-          echo "UPDATER_SIG=$UPDATER_SIG" >> $GITHUB_OUTPUT
-          echo "UPDATER_FILENAME=$(basename $UPDATER_GZ)" >> $GITHUB_OUTPUT
-          echo "SIG=$(cat $UPDATER_SIG)" >> $GITHUB_OUTPUT
+          echo "UPDATER_GZ=$RENAMED_GZ" >> $GITHUB_OUTPUT
+          echo "UPDATER_SIG=$RENAMED_SIG" >> $GITHUB_OUTPUT
+          echo "UPDATER_FILENAME=$RENAMED_GZ" >> $GITHUB_OUTPUT
 
       - name: Upload GitHub Release
         uses: softprops/action-gh-release@v2
@@ -99,12 +103,12 @@ jobs:
       - name: Generate latest.json
         run: |
           VERSION="${{ steps.version.outputs.VERSION }}"
-          AARCH64_GZ=$(ls updater-aarch64/*.tar.gz | head -1)
-          X64_GZ=$(ls updater-x64/*.tar.gz | head -1)
-          AARCH64_SIG=$(cat ${AARCH64_GZ}.sig)
-          X64_SIG=$(cat ${X64_GZ}.sig)
-          AARCH64_FILENAME=$(basename $AARCH64_GZ)
-          X64_FILENAME=$(basename $X64_GZ)
+          AARCH64_GZ=$(find updater-aarch64 -name "*.app.tar.gz" ! -name "*.sig" | head -1)
+          X64_GZ=$(find updater-x64 -name "*.app.tar.gz" ! -name "*.sig" | head -1)
+          AARCH64_SIG=$(cat "${AARCH64_GZ}.sig")
+          X64_SIG=$(cat "${X64_GZ}.sig")
+          AARCH64_FILENAME=$(basename "$AARCH64_GZ")
+          X64_FILENAME=$(basename "$X64_GZ")
           cat > latest.json << EOF
           {
             "version": "$VERSION",
