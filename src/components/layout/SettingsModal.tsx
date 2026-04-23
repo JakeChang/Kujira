@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { invoke } from "@tauri-apps/api/core";
+import { check, type Update } from "@tauri-apps/plugin-updater";
+import { getVersion } from "@tauri-apps/api/app";
 import { useStore } from "../../store";
 import { persistConfig } from "../../utils/persistConfig";
 import { themes } from "../../themes";
 import { setTheme } from "../../hooks/useTheme";
 
-type Section = "theme" | "ai" | "hooks";
+type Section = "theme" | "ai" | "hooks" | "update";
 
 interface SettingsModalProps {
   onClose: () => void;
@@ -16,6 +18,7 @@ const NAV_ITEMS: { id: Section; label: string; icon: string }[] = [
   { id: "theme", label: "主題配色", icon: "◐" },
   { id: "ai", label: "AI 設定", icon: "✦" },
   { id: "hooks", label: "Claude 狀態", icon: "●" },
+  { id: "update", label: "應用程式更新", icon: "↑" },
 ];
 
 export function SettingsModal({ onClose }: SettingsModalProps) {
@@ -95,6 +98,7 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
           {section === "theme" && <ThemeSection />}
           {section === "ai" && <AISection />}
           {section === "hooks" && <HooksSection />}
+          {section === "update" && <UpdateSection />}
         </div>
       </div>
     </div>,
@@ -411,6 +415,133 @@ function HooksSection() {
           </div>
         </>
       )}
+    </div>
+  );
+}
+
+/* ── Update Section ── */
+function UpdateSection() {
+  type UpdateStatus = "idle" | "checking" | "up_to_date" | "available" | "downloading" | "done" | "error";
+  const [updateStatus, setUpdateStatus] = useState<UpdateStatus>("idle");
+  const [availableVersion, setAvailableVersion] = useState("");
+  const [appVersion, setAppVersion] = useState("");
+  const pendingUpdate = useRef<Update | null>(null);
+
+  useEffect(() => {
+    getVersion().then(setAppVersion).catch(() => {});
+  }, []);
+
+  const handleCheckUpdate = async () => {
+    setUpdateStatus("checking");
+    try {
+      const update = await check();
+      if (update) {
+        pendingUpdate.current = update;
+        setAvailableVersion(update.version);
+        setUpdateStatus("available");
+      } else {
+        setUpdateStatus("up_to_date");
+        setTimeout(() => setUpdateStatus("idle"), 3000);
+      }
+    } catch {
+      setUpdateStatus("error");
+      setTimeout(() => setUpdateStatus("idle"), 3000);
+    }
+  };
+
+  const handleInstallUpdate = async () => {
+    if (!pendingUpdate.current) return;
+    setUpdateStatus("downloading");
+    try {
+      await pendingUpdate.current.downloadAndInstall();
+      setUpdateStatus("done");
+    } catch {
+      setUpdateStatus("error");
+      setTimeout(() => setUpdateStatus("idle"), 3000);
+    }
+  };
+
+  return (
+    <div>
+      <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>
+        應用程式更新
+      </div>
+
+      <div style={{
+        padding: "12px",
+        borderRadius: "8px",
+        background: "var(--bg-primary)",
+        border: "1px solid var(--border-color)",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div>
+            <div style={{ fontSize: "12px", fontWeight: 500, color: "var(--text-primary)", marginBottom: "4px" }}>
+              目前版本
+            </div>
+            <div style={{ fontSize: "11px", color: "var(--text-muted)" }}>
+              {appVersion ? `v${appVersion}` : "載入中..."}
+            </div>
+          </div>
+          {updateStatus === "idle" && (
+            <button
+              onClick={handleCheckUpdate}
+              style={{
+                fontSize: "11px",
+                fontWeight: 500,
+                padding: "5px 14px",
+                borderRadius: "6px",
+                border: "1px solid var(--border-color)",
+                background: "transparent",
+                color: "var(--text-secondary)",
+                cursor: "pointer",
+                transition: "all 0.15s",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "var(--text-primary)"; e.currentTarget.style.borderColor = "var(--text-muted)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-secondary)"; e.currentTarget.style.borderColor = "var(--border-color)"; }}
+            >
+              檢查更新
+            </button>
+          )}
+          {updateStatus === "checking" && (
+            <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>檢查中…</span>
+          )}
+          {updateStatus === "up_to_date" && (
+            <span style={{ fontSize: "11px", color: "var(--accent-green)" }}>✓ 已是最新版本</span>
+          )}
+          {updateStatus === "available" && (
+            <button
+              onClick={handleInstallUpdate}
+              style={{
+                fontSize: "11px",
+                fontWeight: 500,
+                padding: "5px 14px",
+                borderRadius: "6px",
+                border: "none",
+                background: "var(--accent-blue)",
+                color: "#1a1d23",
+                cursor: "pointer",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+            >
+              安裝 v{availableVersion}
+            </button>
+          )}
+          {updateStatus === "downloading" && (
+            <span style={{ fontSize: "11px", color: "var(--accent-blue)" }}>下載中…</span>
+          )}
+          {updateStatus === "done" && (
+            <span style={{ fontSize: "11px", color: "var(--accent-green)" }}>✓ 安裝完成，請重啟</span>
+          )}
+          {updateStatus === "error" && (
+            <span style={{ fontSize: "11px", color: "var(--accent-red)" }}>✗ 更新失敗</span>
+          )}
+        </div>
+      </div>
+
+      <div style={{ fontSize: "11px", color: "var(--text-muted)", lineHeight: 1.5, marginTop: "12px" }}>
+        點擊「檢查更新」會連線至更新伺服器確認是否有新版本可用。
+      </div>
     </div>
   );
 }
