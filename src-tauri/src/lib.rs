@@ -1,4 +1,5 @@
 mod commands;
+mod tray;
 
 use commands::{claude, config, gemini, git, hooks, pty, server};
 use tauri::{Manager, Emitter};
@@ -77,6 +78,9 @@ pub fn run() {
                 let _ = win.show();
             });
 
+            // Create system tray icon
+            tray::create_tray(app)?;
+
             // Clean stale status files from previous session
             {
                 let status_dir = hooks::status_dir();
@@ -103,6 +107,7 @@ pub fn run() {
                         let _ = app_handle.emit("claude-status", ClaudeStatusPayload {
                             statuses: current.clone(),
                         });
+                        tray::update_tray(&app_handle, &current);
                         last = current;
                     }
                 }
@@ -144,8 +149,6 @@ pub fn run() {
             // Claude
             claude::claude_usage_read,
             claude::claude_daily_usage_read,
-            claude::claude_sessions_list,
-            claude::claude_session_messages,
             claude::claude_open_login,
             claude::claude_check_login_url,
             claude::claude_extract_cookies,
