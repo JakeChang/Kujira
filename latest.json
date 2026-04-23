@@ -1,1 +1,15 @@
-{"version":"0.1.0","notes":"","pub_date":"2026-04-22T00:00:00Z","platforms":{}}
+{
+  "version": "0.1.0",
+  "notes": "版本 0.1.0",
+  "pub_date": "2026-04-23T00:05:12Z",
+  "platforms": {
+    "darwin-aarch64": {
+      "url": "https://github.com/JakeChang/Kujira/releases/download/v0.1.0/Kujira.app.tar.gz",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSdFpOSDY1bUgwNVJDQW1NRWVwVm9aU2NvYjROakhqYXZQczhOUU5oVGFXdERYUFY5WFZsY3RUQXpKbC9DYUxlUEFjV3BHRDJyOFZ4VUJtTmdxSzRjbGV2bWhDenB4Z1FVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc2OTAyNjcxCWZpbGU6S3VqaXJhLmFwcC50YXIuZ3oKWGZxZWQvVlNaVVJ6elI0VkZaWmtrS3hhUzNhM2NtdHdRZ2Y2c2ZqaUZVY2RGdzhqcDlDZWF0OG90VjgxT3pKRStRQjhSc1d0RStWRnJwWkIzUEYzRFE9PQo="
+    },
+    "darwin-x86_64": {
+      "url": "https://github.com/JakeChang/Kujira/releases/download/v0.1.0/Kujira.app.tar.gz",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSdFpOSDY1bUgwNVFha1NBTkg0cSsxR3E0MmdZNmI3MmNYNGczNFp5a0dCczNQSEdVVkIwTHZNZzRFaGNSL0lLbU50NzhHcTdGbFNCM2FpTmdNZXdhclk4VWZUblpjSHdnPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc2OTAyNjk2CWZpbGU6S3VqaXJhLmFwcC50YXIuZ3oKcHlvWGduMUxNcmY4cHFjUG9SK3dCMzljM0ZKRmwrVDlPRzQrZ0t6ampDMkhGRm1uZ0d6SEtLT1ZrNFUrUy9TcTM3NUxBUUNyWUlhdDZlSVNYN3ZBRFE9PQo="
+    }
+  }
+}
