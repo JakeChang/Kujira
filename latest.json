@@ -1,15 +1,15 @@
 {
-  "version": "0.1.2",
-  "notes": "版本 0.1.2",
-  "pub_date": "2026-04-23T15:15:36Z",
+  "version": "0.1.3",
+  "notes": "版本 0.1.3",
+  "pub_date": "2026-04-24T03:37:00Z",
   "platforms": {
     "darwin-aarch64": {
-      "url": "https://github.com/JakeChang/Kujira/releases/download/v0.1.2/Kujira_0.1.2_aarch64.app.tar.gz",
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSdFpOSDY1bUgwNVRhejlOL2liVlpkMXl0WXRyNVhFWURib3BpUmh4R1NaUHdaTEtibjFhYUJFSTU1QSt0dTFkay8yTXZvZTFyc2UxRDM0WTJrY2RsODVqV0JqS01HK0FzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc2OTU3MzE4CWZpbGU6S3VqaXJhLmFwcC50YXIuZ3oKM3p5SzIwbmtna2wyUnpPNUhIamFIYWVEc2plcFMwNDQwSWo3L0hvMlA3SEtRVVJrTjNOM3FOSmNDS1NES1FzbjMyZ0pmV3ltbVBHU1VDSUVPRGpzQ2c9PQo="
+      "url": "https://github.com/JakeChang/Kujira/releases/download/v0.1.3/Kujira_0.1.3_aarch64.app.tar.gz",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSdFpOSDY1bUgwNWZUa3hQRjNNU0ZQbmsrVERGbDIyZlkzTCtZNFdoYzB0SXduSVRqcjlaRS94cVNxdStFcytuRlNkUEtzTGthSGVhd21wbGlGRUpzdWQ2V1VHNmg5Q3c0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc3MDAxODAxCWZpbGU6S3VqaXJhLmFwcC50YXIuZ3oKUEdrM3FjcTh1NTdFVnQ4Y3BXUTFTQjJVYzBaQitnby9iZXhhZXdSZ2xqWjBWemhwN25JbUlkeTE1cG1VNUlSS2o1V0dBTG9hYnR4NVFlbkhwMCtQQlE9PQo="
     },
     "darwin-x86_64": {
-      "url": "https://github.com/JakeChang/Kujira/releases/download/v0.1.2/Kujira_0.1.2_x64.app.tar.gz",
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSdFpOSDY1bUgwNVoydjdOZDNsVW9HMlBTbWswRzNDREs5T2N2NjBvUVhYSUMyU2lEQTExbXpYM3FRMHEyS2NGRTZyQWU1dFlmQ21ydWVSckJHQVRXelcwKzNpMnVlUFFFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc2OTU3Mjg4CWZpbGU6S3VqaXJhLmFwcC50YXIuZ3oKeVBXcks4SEg4TDN5OFBCbzd1VmFOMzN6MXd4Tkp0SXk5ak9BUzFGN3ZiaWVZalFFYlh5VUt1UU5nSmRwZ3lrZ3hrcWl5cG9haWcreVlRMXV5ZWltQVE9PQo="
+      "url": "https://github.com/JakeChang/Kujira/releases/download/v0.1.3/Kujira_0.1.3_x64.app.tar.gz",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSdFpOSDY1bUgwNWZTOFRDYlJqY3Q4MkZxT2JYekZZRUdwdUs3bFdvMkpYTFNCeEMxWDRGRkt4RWRiQVVlRWtGSTlMWGQrMC9kdVNENHZXRmw3UWNDK3NXYW44aFVWWFFnPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc3MDAxNzA3CWZpbGU6S3VqaXJhLmFwcC50YXIuZ3oKeW8yMnV6aDgrZjEwZlVmTVFSSHE1UTlQb2FKdEFwUE9CUVppYkZna3I2RVE2MDM0YkNib1A4dEphK0FMRFN2SnhaTXZ1dmcwWnFGOFJTNWRZbW1vREE9PQo="
     }
   }
 }
