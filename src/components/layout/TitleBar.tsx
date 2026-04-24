@@ -1,5 +1,6 @@
 import { useCallback, useState, useRef, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/core";
+import { listen } from "@tauri-apps/api/event";
 import { open } from "@tauri-apps/plugin-shell";
 import { useShallow } from "zustand/react/shallow";
 import { useStore } from "../../store";
@@ -19,6 +20,15 @@ export function TitleBar() {
       toggleRightPanel: s.toggleRightPanel,
     })),
   );
+
+  const [activeClaudeCount, setActiveClaudeCount] = useState(0);
+  useEffect(() => {
+    const unlisten = listen<{ statuses: Record<string, string> }>("claude-status", (event) => {
+      const count = Object.values(event.payload.statuses).filter((s) => s === "working" || s === "pending").length;
+      setActiveClaudeCount(count);
+    });
+    return () => { unlisten.then((fn) => fn()); };
+  }, []);
 
   const loginPollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const handleLogin = useCallback(async () => {
@@ -99,7 +109,12 @@ export function TitleBar() {
               onMouseEnter={(e) => { if (!claudeDropdownOpen) e.currentTarget.style.background = HOVER_BG; }}
               onMouseLeave={(e) => { if (!claudeDropdownOpen) e.currentTarget.style.background = "transparent"; }}
             >
-              <span style={{ color: "var(--accent-cyan)", fontSize: "10px" }}>◆</span>
+              <span style={{ color: activeClaudeCount > 0 ? "var(--accent-green)" : "var(--accent-cyan)", fontSize: "10px" }} className={activeClaudeCount > 0 ? "animate-pulse" : ""}>◆</span>
+              {activeClaudeCount > 0 && (
+                <span style={{ color: "var(--accent-green)", fontVariantNumeric: "tabular-nums", fontWeight: 700, fontSize: "11px" }}>
+                  {activeClaudeCount}
+                </span>
+              )}
               {sessionRemaining !== null && (
                 <>
                   <div style={{ width: "36px", height: "3px", borderRadius: "2px", overflow: "hidden", background: "var(--border-color)" }}>
