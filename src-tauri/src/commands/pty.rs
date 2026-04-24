@@ -25,6 +25,14 @@ impl Default for PtyState {
 }
 
 impl PtyState {
+    /// Get the OS PID for a given PTY session id.
+    pub fn get_pid(&self, id: &str) -> Option<u32> {
+        self.sessions
+            .lock()
+            .ok()
+            .and_then(|s| s.get(id).and_then(|sess| sess.pid))
+    }
+
     /// Kill all PTY sessions — called on app exit
     pub fn kill_all(&self) {
         if let Ok(mut sessions) = self.sessions.lock() {

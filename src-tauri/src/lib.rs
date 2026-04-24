@@ -1,12 +1,11 @@
 mod commands;
+mod tray;
 
 use commands::{claude, config, gemini, git, hooks, pty, server};
 use tauri::{Manager, Emitter};
 use tauri::menu::{MenuBuilder, SubmenuBuilder, MenuItemBuilder, PredefinedMenuItem};
-use tauri::tray::TrayIconBuilder;
 use serde::Serialize;
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
 
 #[derive(Clone, Serialize)]
 struct ClaudeStatusPayload {
@@ -79,6 +78,9 @@ pub fn run() {
                 let _ = win.show();
             });
 
+            // Create system tray icon
+            tray::create_tray(app)?;
+
             // Clean stale status files from previous session
             {
                 let status_dir = hooks::status_dir();
@@ -91,16 +93,8 @@ pub fn run() {
                 }
             }
 
-            // Menu bar tray icon
-            let tray = TrayIconBuilder::new()
-                .icon(app.default_window_icon().unwrap().clone())
-                .icon_as_template(true)
-                .build(app)?;
-            let tray = Arc::new(Mutex::new(tray));
-
             // Background polling for Claude status files
             let app_handle = app.handle().clone();
-            let tray_clone = Arc::clone(&tray);
             std::thread::spawn(move || {
                 let status_dir = hooks::status_dir();
                 eprintln!("[claude-status] Polling directory: {:?}", status_dir);
@@ -113,11 +107,7 @@ pub fn run() {
                         let _ = app_handle.emit("claude-status", ClaudeStatusPayload {
                             statuses: current.clone(),
                         });
-                        let active = current.values().filter(|s| *s == "working" || *s == "pending").count();
-                        let title = if active > 0 { active.to_string() } else { String::new() };
-                        if let Ok(t) = tray_clone.lock() {
-                            let _ = t.set_title(Some(&title));
-                        }
+                        tray::update_tray(&app_handle, &current);
                         last = current;
                     }
                 }
@@ -159,8 +149,6 @@ pub fn run() {
             // Claude
             claude::claude_usage_read,
             claude::claude_daily_usage_read,
-            claude::claude_sessions_list,
-            claude::claude_session_messages,
             claude::claude_open_login,
             claude::claude_check_login_url,
             claude::claude_extract_cookies,

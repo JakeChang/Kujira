@@ -1,6 +1,6 @@
 [package]
 name = "kujira"
-version = "0.1.0"
+version = "0.1.2"
 edition = "2021"
 
 [lib]
@@ -12,7 +12,7 @@ name = "kujira"
 path = "src/main.rs"
 
 [dependencies]
-tauri = { version = "2", features = ["tray-icon"] }
+tauri = { version = "2", features = ["tray-icon", "image-png"] }
 tauri-plugin-shell = "2"
 tauri-plugin-fs = "2"
 tauri-plugin-notification = "2"

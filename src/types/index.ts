@@ -80,28 +80,6 @@ export interface ClaudeUsage {
   available: boolean;
 }
 
-export interface SessionMessage {
-  timestamp: string;
-  role: string; // "user" | "assistant"
-  text: string;
-  tool_name: string | null;
-}
-
-export interface ClaudeSession {
-  session_id: string;
-  cwd: string;
-  branch: string | null;
-  first_ts: string;
-  last_ts: string;
-  user_messages: number;
-  assistant_messages: number;
-  input_tokens: number;
-  output_tokens: number;
-  cache_tokens: number;
-  cost_usd: number;
-  last_model: string | null;
-}
-
 export interface DailyUsage {
   date: string;
   input: number;
