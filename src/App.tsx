@@ -48,14 +48,23 @@ export default function App() {
 
   // Sync selectedProjectId when active tab changes
   useEffect(() => {
+    if (!config) return;
     const activeTab = tabs.find((t) => t.id === activeTabId);
-    if (!activeTab?.cwd || !config) return;
-    const matchingProject = config.projects.find((p) => activeTab.cwd === p.path);
-    if (matchingProject) {
-      const s = useStore.getState();
-      if (s.selectedProjectId !== matchingProject.id) {
-        s.setSelectedProjectId(matchingProject.id);
+
+    let matchingProjectId: string | null = null;
+    if (activeTab) {
+      if (activeTab.cwd) {
+        const project = config.projects.find((p) => activeTab.cwd === p.path);
+        if (project) matchingProjectId = project.id;
+      } else if (activeTab.type === "log" && activeTab.serverId) {
+        const project = config.projects.find((p) => p.id === activeTab.serverId);
+        if (project) matchingProjectId = project.id;
       }
+    }
+
+    const s = useStore.getState();
+    if (s.selectedProjectId !== matchingProjectId) {
+      s.setSelectedProjectId(matchingProjectId);
     }
   }, [activeTabId, tabs, config]);
 
